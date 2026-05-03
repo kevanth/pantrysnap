@@ -40,6 +40,11 @@ function App() {
 	const addItem = (newItem) => {
 		setItems([...items, newItem]);
 	};
+	const [newItem, setNewItem] = useState({
+		name: "New Item",
+		quantity: 1,
+		category: "General",
+	});
 
 	return (
 		<div
@@ -71,13 +76,52 @@ function App() {
 			{showAddItemCard && (
 				<div
 					className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
-					onClick={() => setShowAddItemCard(false)} // only backdrop closes it
+					onClick={() => {
+						setShowAddItemCard(false);
+						setNewItem({
+							name: "New Item",
+							quantity: 1,
+							category: "General",
+						});
+					}} // only backdrop closes it
 				>
 					<div
-						className="bg-white rounded-xl p-6"
+						className="w-full max-w-md h-full max-h-[30vh] bg-gray-800 rounded-xl p-6"
 						onClick={(e) => e.stopPropagation()} // clicking card doesn't close it
-					>
-						Test
+						text-white
+						inset-10>
+						<p>Add Item</p>
+						<input
+							className="bg-gray-700 w-full rounded-s p-2"
+							placeholder={newItem.name}
+							onChange={(e) =>
+								setNewItem({ ...newItem, name: e.target.value })
+							}></input>
+						<input
+							className="bg-gray-700 w-full rounded-s p-2 mt-2"
+							placeholder={newItem.quantity}
+							onChange={(e) =>
+								setNewItem({ ...newItem, quantity: e.target.value })
+							}></input>
+						<input
+							className="bg-gray-700 w-full rounded-s p-2 mt-2"
+							placeholder={newItem.category}
+							onChange={(e) =>
+								setNewItem({ ...newItem, category: e.target.value })
+							}></input>
+						<button
+							className="bg-blue-500 px-4 py-2 rounded-lg mt-4"
+							onClick={() => {
+								addItem({ ...newItem, id: Date.now() + Math.random() });
+								setShowAddItemCard(false);
+								setNewItem({
+									name: "New Item",
+									quantity: 1,
+									category: "General",
+								});
+							}}>
+							Add
+						</button>
 					</div>
 				</div>
 			)}
