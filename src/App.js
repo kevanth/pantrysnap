@@ -1,6 +1,8 @@
 import { useState } from "react";
 import ItemCard from "./ItemCard";
 import ItemEditPopup from "./ItemEditPopup.js";
+import { LuCamera } from "react-icons/lu";
+import AddReceiptPopup from "./AddReceiptPopup.js";
 
 const TEST_ITEMS = [
 	{ name: "Milk", quantity: 2, category: "Dairy", id: 1 },
@@ -11,7 +13,17 @@ const TEST_ITEMS = [
 
 const EMPTY_ITEM = { name: "", quantity: 1, category: "General" };
 
-const CATEGORIES = ["All", "General", "Dairy", "Bakery", "Grains", "Produce", "Proteins", "Snacks", "Beverages"];
+const CATEGORIES = [
+	"All",
+	"General",
+	"Dairy",
+	"Bakery",
+	"Grains",
+	"Produce",
+	"Proteins",
+	"Snacks",
+	"Beverages",
+];
 
 function App() {
 	const [items, setItems] = useState(TEST_ITEMS);
@@ -19,10 +31,13 @@ function App() {
 	const [activeCategory, setActiveCategory] = useState("All");
 	const [showAddItemCard, setShowAddItemCard] = useState(false);
 	const [editCard, setEditCard] = useState(null);
+	const [showAddReceipt, setshowAddReceipt] = useState(false);
 
 	const filtered = items.filter((item) => {
-		const matchesSearch = search !== "" ? item.name.toLowerCase().includes(search) : true;
-		const matchesCategory = activeCategory === "All" || item.category === activeCategory;
+		const matchesSearch =
+			search !== "" ? item.name.toLowerCase().includes(search) : true;
+		const matchesCategory =
+			activeCategory === "All" || item.category === activeCategory;
 		return matchesSearch && matchesCategory;
 	});
 
@@ -41,17 +56,26 @@ function App() {
 			{/* Header */}
 			<header className="border-b border-[#383838] px-6 py-4 flex items-center justify-between">
 				<div>
-					<h1 className="text-xl font-bold text-white tracking-tight">PantrySnap</h1>
+					<h1 className="text-xl font-bold text-white tracking-tight">
+						PantrySnap
+					</h1>
 					<p className="text-gray-500 text-xs mt-0.5">Your kitchen inventory</p>
 				</div>
-				<button
-					className="bg-[#4a9b6f] hover:bg-[#3a7a57] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
-					onClick={(e) => {
-						e.stopPropagation();
-						setShowAddItemCard(true);
-					}}>
-					+ Add Item
-				</button>
+				<div className="flex items-center gap-3">
+					<button
+						className="bg-[#4a9b6f] hover:bg-[#3a7a57] px-4 py-2 rounded-lg transition-colors text-white font-semibold"
+						onClick={() => setshowAddReceipt(true)}>
+						<LuCamera size={20} />
+					</button>
+					<button
+						className="bg-[#4a9b6f] hover:bg-[#3a7a57] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+						onClick={(e) => {
+							e.stopPropagation();
+							setShowAddItemCard(true);
+						}}>
+						+ Add Item
+					</button>
+				</div>
 			</header>
 
 			<main className="max-w-5xl mx-auto px-6 py-6 flex flex-col gap-6">
@@ -59,11 +83,15 @@ function App() {
 				<div className="flex gap-4">
 					<div className="bg-[#242424] border border-[#383838] rounded-xl px-5 py-3 flex flex-col gap-0.5">
 						<span className="text-gray-400 text-xs">Total Items</span>
-						<span className="text-white text-2xl font-bold">{items.length}</span>
+						<span className="text-white text-2xl font-bold">
+							{items.length}
+						</span>
 					</div>
 					<div className="bg-[#242424] border border-[#4a9b6f] rounded-xl px-5 py-3 flex flex-col gap-0.5">
 						<span className="text-gray-400 text-xs">Low Stock</span>
-						<span className="text-[#4a9b6f] text-2xl font-bold">{lowStockCount}</span>
+						<span className="text-[#4a9b6f] text-2xl font-bold">
+							{lowStockCount}
+						</span>
 					</div>
 				</div>
 
@@ -107,7 +135,9 @@ function App() {
 					<div className="flex flex-col items-center justify-center py-20 text-center">
 						<span className="text-4xl mb-3">🥫</span>
 						<p className="text-gray-400 font-medium">No items found</p>
-						<p className="text-gray-500 text-sm mt-1">Try a different category or search term</p>
+						<p className="text-gray-500 text-sm mt-1">
+							Try a different category or search term
+						</p>
 					</div>
 				)}
 			</main>
@@ -116,6 +146,15 @@ function App() {
 				<ItemEditPopup
 					item={EMPTY_ITEM}
 					onClose={() => setShowAddItemCard(false)}
+					onSave={(editedItem) => {
+						addItem({ ...editedItem, id: items.length + 1 });
+					}}
+				/>
+			)}
+
+			{showAddReceipt && (
+				<AddReceiptPopup
+					onClose={() => setshowAddReceipt(false)}
 					onSave={(editedItem) => {
 						addItem({ ...editedItem, id: items.length + 1 });
 					}}

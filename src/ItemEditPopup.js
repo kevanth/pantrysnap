@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 const CATEGORIES = ["General", "Dairy", "Bakery", "Grains", "Produce", "Proteins", "Snacks", "Beverages"];
 
 const inputClass =
