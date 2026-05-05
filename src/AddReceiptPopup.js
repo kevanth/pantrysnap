@@ -3,6 +3,16 @@ import { LuCamera } from "react-icons/lu";
 
 function AddReceiptPopup({ onClose, onSave }) {
 	const [file, setFile] = useState(null);
+
+	function toBase64(file) {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = () => resolve(reader.result.split(",")[1]);
+			reader.onerror = reject;
+			reader.readAsDataURL(file);
+		});
+	}
+
 	function handleUpload(e) {
 		const file = e.target.files[0]; // the selected file
 		setFile(file);
@@ -42,7 +52,8 @@ function AddReceiptPopup({ onClose, onSave }) {
 					className={`mt-4 w-full bg-[#4a9b6f] ${file ? "hover:bg-[#3a7a57]" : ""} text-white font-semibold py-2 rounded-lg transition-colors ${file ? "" : "opacity-50 cursor-not-allowed"}`}
 					onClick={() => {
 						if (file) {
-							onSave(file);
+							const base64 = toBase64(file);
+							onSave(base64);
 							onClose();
 						}
 					}}>
