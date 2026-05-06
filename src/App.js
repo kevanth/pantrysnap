@@ -155,8 +155,15 @@ function App() {
 			{showAddReceipt && (
 				<AddReceiptPopup
 					onClose={() => setshowAddReceipt(false)}
-					onSave={(editedItem) => {
-						addItem({ ...editedItem, id: items.length + 1 });
+					onSave={(newItems) => {
+						console.log("New items to add from receipt:", newItems);
+						setItems((prev) => [
+							...prev,
+							...newItems.map((item, i) => ({
+								...item,
+								id: prev.length + 1 + i,
+							})),
+						]);
 					}}
 				/>
 			)}
