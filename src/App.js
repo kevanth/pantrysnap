@@ -1,15 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ItemCard from "./ItemCard";
 import ItemEditPopup from "./ItemEditPopup.js";
 import { LuCamera } from "react-icons/lu";
 import AddReceiptPopup from "./AddReceiptPopup.js";
-
-const TEST_ITEMS = [
-	{ name: "Milk", quantity: 2, category: "Dairy", id: 1 },
-	{ name: "Tissue", quantity: 5, category: "General", id: 2 },
-	{ name: "Eggs", quantity: 12, category: "Dairy", id: 3 },
-	{ name: "Bread", quantity: 1, category: "Bakery", id: 4 },
-];
 
 const EMPTY_ITEM = { name: "", quantity: 1, category: "General" };
 
@@ -26,7 +19,10 @@ const CATEGORIES = [
 ];
 
 function App() {
-	const [items, setItems] = useState(TEST_ITEMS);
+	const [items, setItems] = useState(() => {
+		const saved = localStorage.getItem("pantry");
+		return saved ? JSON.parse(saved) : [];
+	});
 	const [search, setSearch] = useState("");
 	const [activeCategory, setActiveCategory] = useState("All");
 	const [showAddItemCard, setShowAddItemCard] = useState(false);
@@ -41,6 +37,10 @@ function App() {
 		return matchesSearch && matchesCategory;
 	});
 
+	// Save
+	useEffect(() => {
+		localStorage.setItem("pantry", JSON.stringify(items));
+	}, [items]);
 	const lowStockCount = items.filter((item) => item.quantity <= 2).length;
 
 	const deleteItem = (itemToDelete) => {
