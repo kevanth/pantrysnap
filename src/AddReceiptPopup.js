@@ -97,6 +97,7 @@ function AddReceiptPopup({ onClose, onSave, apiKey }) {
 					{preview ? (
 						<img
 							src={preview}
+							alt="Receipt preview"
 							className="h-full w-full object-cover rounded-xl"
 						/>
 					) : (
