@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ItemCard from "./ItemCard";
 import ItemEditPopup from "./ItemEditPopup.js";
-import { LuCamera } from "react-icons/lu";
+import { LuCamera, LuKey } from "react-icons/lu";
 import AddReceiptPopup from "./AddReceiptPopup.js";
 import ApiKeyPopup from "./ApiKeyPopup.js";
 
@@ -65,6 +65,14 @@ function App() {
 					<p className="text-gray-500 text-xs mt-0.5">Your kitchen inventory</p>
 				</div>
 				<div className="flex items-center gap-3">
+					{apiKey && (
+						<button
+							className="bg-[#2e2e2e] hover:bg-[#383838] border border-[#383838] px-3 py-2 rounded-lg transition-colors text-gray-400 hover:text-white"
+							onClick={() => setShowApiKeyPopup(true)}
+							title="Manage API key">
+							<LuKey size={16} />
+						</button>
+					)}
 					<button
 						className="bg-[#4a9b6f] hover:bg-[#3a7a57] px-4 py-2 rounded-lg transition-colors text-white font-semibold"
 						onClick={() => apiKey ? setshowAddReceipt(true) : setShowApiKeyPopup(true)}
@@ -160,6 +168,8 @@ function App() {
 				<ApiKeyPopup
 					onClose={() => setShowApiKeyPopup(false)}
 					onSave={(key) => setApiKey(key)}
+					onDelete={() => setApiKey("")}
+					existingKey={apiKey}
 				/>
 			)}
 
