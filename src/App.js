@@ -3,6 +3,7 @@ import ItemCard from "./ItemCard";
 import ItemEditPopup from "./ItemEditPopup.js";
 import { LuCamera } from "react-icons/lu";
 import AddReceiptPopup from "./AddReceiptPopup.js";
+import ApiKeyPopup from "./ApiKeyPopup.js";
 
 const EMPTY_ITEM = { name: "", quantity: 1, category: "General" };
 
@@ -28,6 +29,8 @@ function App() {
 	const [showAddItemCard, setShowAddItemCard] = useState(false);
 	const [editCard, setEditCard] = useState(null);
 	const [showAddReceipt, setshowAddReceipt] = useState(false);
+	const [showApiKeyPopup, setShowApiKeyPopup] = useState(false);
+	const [apiKey, setApiKey] = useState(() => localStorage.getItem("anthropic_api_key") || "");
 
 	const filtered = items.filter((item) => {
 		const matchesSearch =
@@ -64,7 +67,8 @@ function App() {
 				<div className="flex items-center gap-3">
 					<button
 						className="bg-[#4a9b6f] hover:bg-[#3a7a57] px-4 py-2 rounded-lg transition-colors text-white font-semibold"
-						onClick={() => setshowAddReceipt(true)}>
+						onClick={() => apiKey ? setshowAddReceipt(true) : setShowApiKeyPopup(true)}
+						title={apiKey ? "Scan receipt" : "Add API key to enable receipt scanning"}>
 						<LuCamera size={20} />
 					</button>
 					<button
@@ -152,8 +156,16 @@ function App() {
 				/>
 			)}
 
+			{showApiKeyPopup && (
+				<ApiKeyPopup
+					onClose={() => setShowApiKeyPopup(false)}
+					onSave={(key) => setApiKey(key)}
+				/>
+			)}
+
 			{showAddReceipt && (
 				<AddReceiptPopup
+					apiKey={apiKey}
 					onClose={() => setshowAddReceipt(false)}
 					onSave={(newItems) => {
 						console.log("New items to add from receipt:", newItems);

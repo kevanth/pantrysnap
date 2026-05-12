@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LuCamera } from "react-icons/lu";
 
-function AddReceiptPopup({ onClose, onSave }) {
+function AddReceiptPopup({ onClose, onSave, apiKey }) {
 	const [file, setFile] = useState(null);
 	const [preview, setPreview] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ function AddReceiptPopup({ onClose, onSave }) {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
-					"x-api-key": process.env.REACT_APP_ANTHROPIC_API_KEY,
+					"x-api-key": apiKey,
 					"anthropic-version": "2023-06-01",
 					"anthropic-dangerous-direct-browser-access": "true",
 				},
